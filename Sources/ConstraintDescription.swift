@@ -31,6 +31,8 @@
 public class ConstraintDescription {
     
     internal let item: LayoutConstraintItem
+    internal var condition: Bool = false
+    internal var rule: AdaptiveRule = .byDirection
     internal var attributes: ConstraintAttributes
     internal var relation: ConstraintRelation? = nil
     internal var sourceLocation: (String, UInt)? = nil
@@ -64,6 +66,20 @@ public class ConstraintDescription {
     internal init(item: LayoutConstraintItem, attributes: ConstraintAttributes) {
         self.item = item
         self.attributes = attributes
+    }
+    
+    internal func copy() -> ConstraintDescription {
+        let new = ConstraintDescription.init(item: item, attributes: attributes)
+        new.condition = condition
+        new.rule = rule
+        new.relation = relation
+        new.sourceLocation = sourceLocation
+        new.label = label
+        new.related = related
+        new.multiplier = multiplier
+        new.constant = constant
+        new.priority = priority
+        return new
     }
     
 }

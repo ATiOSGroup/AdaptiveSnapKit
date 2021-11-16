@@ -42,6 +42,13 @@ public class ConstraintMakerFinalizable {
         return self
     }
     
+    /// 设定适配规则
+    @discardableResult
+    public func rule(_ rule: AdaptiveRule) -> ConstraintMakerFinalizable {
+        self.description.rule = rule
+        return self
+    }
+    
     public var constraint: Constraint {
         return self.description.constraint!
     }

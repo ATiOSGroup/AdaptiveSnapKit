@@ -181,6 +181,7 @@ public class ConstraintMaker {
         let maker = ConstraintMaker(item: item)
         closure(maker)
         var constraints: [Constraint] = []
+        print(maker.descriptions.map({$0.attributes.layoutAttributes.map({$0.rawValue})}))
         for description in maker.descriptions {
             guard let constraint = description.constraint else {
                 continue
@@ -218,6 +219,62 @@ public class ConstraintMaker {
         let constraints = item.constraints
         for constraint in constraints {
             constraint.deactivateIfNeeded()
+        }
+    }
+    
+    /// 只有在condition为真的情况下，在这句与上一句之间的约束才会生效（或者直接用if也一样）
+    public func markForCondition(_ condition: Bool) {
+        if condition == true {
+            for description in descriptions {
+                description.condition = true
+            }
+        } else {
+            for (index, description) in descriptions.enumerated().reversed() {
+                if description.condition == false {
+                    descriptions.remove(at: index)
+                }
+            }
+        }
+    }
+    
+    /// 对指定属性进行机型适配
+    public func adapt(_ attributes: Array<AdaptiveAttribute>) {
+        var newDescriptions = [ConstraintDescription]()
+        for description in descriptions {
+            let current = description.attributes
+            let need = attributes.map { $0.constraint }.union()
+            
+            let keepOrigin = current.subtracting(need)
+            let needAdapt = current.intersection(need)
+            
+            // 分割不需要适配的属性
+            if !keepOrigin.isEmpty {
+                let newDescription = description.copy()
+                newDescription.attributes.remove(needAdapt)
+                newDescriptions.append(newDescription)
+                description.attributes.remove(keepOrigin)
+            }
+            
+//            let horizentalAttribute = [AdaptiveAttribute].horizental.map { $0.constraint }.union()
+//            
+//            let vertical = needAdapt.subtracting(horizentalAttribute)
+//            let horizental = needAdapt.subtracting(vertical)
+//            
+//            if !vertical.isEmpty, !horizental.isEmpty {
+//                
+//            }
+            
+            
+            AdaptiveRuleManager.shared.excute(description)
+        }
+        
+        if newDescriptions.count > 0 {
+            descriptions.append(contentsOf: newDescriptions)
+        }
+        
+        // 当出现需要keep不需要adapt时，可能存在空的约束，清除
+        descriptions.removeAll { description in
+            description.attributes.isEmpty
         }
     }
     

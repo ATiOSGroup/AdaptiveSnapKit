@@ -33,10 +33,12 @@ import Foundation
     typealias LayoutAttribute = NSLayoutAttribute
 #endif
     typealias LayoutPriority = UILayoutPriority
+    typealias TargetScreen = UIScreen
 #else
     import AppKit
     typealias LayoutRelation = NSLayoutConstraint.Relation
     typealias LayoutAttribute = NSLayoutConstraint.Attribute
     typealias LayoutPriority = NSLayoutConstraint.Priority
+    typealias TargetScreen = NSScreen
 #endif
 
