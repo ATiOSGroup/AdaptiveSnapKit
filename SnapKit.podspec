@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name = 'AdaptiveSnapKit'
+  s.name = 'SnapKit'
   s.version = '5.0.1.1'
   s.license = 'MIT'
   s.summary = 'Harness the power of auto layout with a simplified, chainable, and compile time safe syntax.'
