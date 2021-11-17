@@ -37,6 +37,25 @@ public class ConstraintMakerRelatable {
     }
     
     internal func relatedTo(_ other: ConstraintRelatableTarget, relation: ConstraintRelation, file: String, line: UInt) -> ConstraintMakerEditable {
+        if description.attributes.contains(.ratio) {
+            guard let item = self.description.item as? ConstraintView else {
+                fatalError("Ratio only support View")
+            }
+            
+            description.attributes = .width
+            
+            let newMakerEditable = relatedTo(item.snp.height, relation: .equal, file: file, line: line)
+            
+            if let other = other as? ConstraintView {
+                let ratio = other.bounds.width / other.bounds.height
+                return newMakerEditable.multipliedBy(ratio)
+            } else if let other = other as? ConstraintConstantTarget {
+                return newMakerEditable.multipliedBy(other as! ConstraintMultiplierTarget)
+            } else {
+                fatalError("Not supported ratio target")
+            }
+        }
+        
         let related: ConstraintItem
         let constant: ConstraintConstantTarget
         

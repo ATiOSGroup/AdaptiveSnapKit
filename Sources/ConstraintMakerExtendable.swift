@@ -192,4 +192,9 @@ public class ConstraintMakerExtendable: ConstraintMakerRelatable {
         return self
     }
     
+    public var ratio: ConstraintMakerExtendable {
+        self.description.attributes += .height
+        return self
+    }
+    
 }

@@ -86,7 +86,11 @@ extension ConstraintConstantTarget {
                     return value.x
                 case .top, .bottom, .centerY, .topMargin, .bottomMargin, .centerYWithinMargins, .lastBaseline, .firstBaseline:
                     return value.y
-                case .width, .height, .notAnAttribute:
+                case .width:
+                    return value.x
+                case .height:
+                    return value.y
+                case .notAnAttribute:
                     return 0.0
                 #if swift(>=5.0)
                 @unknown default:

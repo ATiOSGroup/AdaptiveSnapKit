@@ -163,6 +163,32 @@ public class ConstraintMaker {
         return self.makeExtendableWithAttributes(.centerWithinMargins)
     }
     
+    public var ratio: ConstraintMakerExtendable {
+        return self.makeExtendableWithAttributes(.ratio)
+    }
+    
+    public var view: ConstraintView {
+        if let target = item as? ConstraintView {
+            return target
+        } else {
+            fatalError("The Maker Target is not a View")
+        }
+    }
+    
+    /// View图片的宽除高
+    public var imageRatio: CGFloat {
+#if os(iOS) || os(tvOS)
+        if let target = item as? UIImageView, let image = target.image {
+            return image.size.width / image.size.height
+        }
+#else
+        if let target = item as? NSImageView, let image = target.image {
+            return image.size.width / image.size.height
+        }
+#endif
+        fatalError("The Maker Target is not a ImageView")
+    }
+
     public let item: LayoutConstraintItem
     private var descriptions = [ConstraintDescription]()
     
@@ -181,7 +207,6 @@ public class ConstraintMaker {
         let maker = ConstraintMaker(item: item)
         closure(maker)
         var constraints: [Constraint] = []
-        print(maker.descriptions.map({$0.attributes.layoutAttributes.map({$0.rawValue})}))
         for description in maker.descriptions {
             guard let constraint = description.constraint else {
                 continue
@@ -254,16 +279,6 @@ public class ConstraintMaker {
                 newDescriptions.append(newDescription)
                 description.attributes.remove(keepOrigin)
             }
-            
-//            let horizentalAttribute = [AdaptiveAttribute].horizental.map { $0.constraint }.union()
-//            
-//            let vertical = needAdapt.subtracting(horizentalAttribute)
-//            let horizental = needAdapt.subtracting(vertical)
-//            
-//            if !vertical.isEmpty, !horizental.isEmpty {
-//                
-//            }
-            
             
             AdaptiveRuleManager.shared.excute(description)
         }

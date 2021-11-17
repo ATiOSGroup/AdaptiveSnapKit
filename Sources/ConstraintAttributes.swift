@@ -96,6 +96,8 @@ internal struct ConstraintAttributes : OptionSet, ExpressibleByIntegerLiteral {
     @available(iOS 8.0, *)
     internal static let centerYWithinMargins: ConstraintAttributes = ConstraintAttributes(UInt(1) << 19)
     
+    internal static let ratio: ConstraintAttributes = ConstraintAttributes(UInt(1) << 50)
+    
     // aggregates
     
     internal static let edges: ConstraintAttributes = [.horizontalEdges, .verticalEdges]
