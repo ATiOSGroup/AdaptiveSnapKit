@@ -22,9 +22,9 @@ public class AdaptiveRuleManager {
     private func getScreenSize(_ description: ConstraintDescription) -> CGSize? {
         let screen = (description.item as? ConstraintView)?.window?.screen
 #if os(iOS) || os(tvOS)
-        return screen?.bounds.size
+        return (screen ?? UIScreen.main)?.bounds.size
 #else
-        return screen?.frame.size
+        return (screen ?? NSScreen.main)?.frame.size
 #endif
     }
     
