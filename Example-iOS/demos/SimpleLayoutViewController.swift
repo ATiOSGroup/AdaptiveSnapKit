@@ -57,7 +57,6 @@ class SimpleLayoutViewController: UIViewController {
     }
 
     override func updateViewConstraints() {
-
         if (!didSetupConstraints) {
 
             blackView.snp.makeConstraints { make in
