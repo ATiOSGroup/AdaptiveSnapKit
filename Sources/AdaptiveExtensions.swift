@@ -14,6 +14,7 @@ import AppKit
 #endif
 
 extension BinaryFloatingPoint {
+    /// 按照规则适配
     public func adapted(to rule: AdaptiveRule, screen: TargetScreen? = nil) -> CGFloat {
         let screenSize: CGSize = {
 #if os(iOS) || os(tvOS)
@@ -35,6 +36,7 @@ extension BinaryFloatingPoint {
 }
 
 extension BinaryInteger {
+    /// 按照规则适配
     public func adapted(to rule: AdaptiveRule, screen: TargetScreen? = nil) -> CGFloat {
         CGFloat(self).adapted(to: rule, screen: screen)
     }

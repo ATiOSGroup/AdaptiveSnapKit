@@ -11,8 +11,8 @@ import Foundation
 public enum AdaptiveRule {
     /// 默认, 可以不使用rule()
     case byDirection
-    /// 全部按照水平约束匹配
+    /// 按照水平缩放匹配
     case x
-    /// 全部按照纵向约束匹配
+    /// 按照纵向缩放匹配
     case y
 }

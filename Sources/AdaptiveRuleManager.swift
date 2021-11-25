@@ -17,6 +17,7 @@ import AppKit
 public class AdaptiveRuleManager {
     public static let shared = AdaptiveRuleManager()
     
+    /// 设计尺寸
     public var designSize: CGSize = .zero
     
     private func getScreenSize(_ description: ConstraintDescription) -> CGSize? {
@@ -64,8 +65,8 @@ public class AdaptiveRuleManager {
         }
         
         if let value = constant as? Double {
-            description.constant = CGPoint(x: value * scaleX,
-                                           y: value * scaleY)
+            description.constant = CGPoint(x: CGFloat(value) * scaleX,
+                                           y: CGFloat(value) * scaleY)
         }
         
         if let value = constant as? Int {

@@ -62,27 +62,22 @@ class SimpleLayoutViewController: UIViewController {
             blackView.snp.makeConstraints { make in
                 make.center.equalTo(view)
                 make.size.equalTo(CGSize(width: 100, height: 100))
-                make.adapt(.all)
+//                make.adapt(.all)
             }
 
             redView.snp.makeConstraints { make in
-                make.top.equalTo(blackView.snp.bottom).offset(20.0)
-                make.right.equalTo(blackView.snp.left).offset(-20.0)
-                make.size.equalTo(CGSize(width: 100, height: 100))
-                make.markForCondition(false)
-                
                 make.top.equalTo(blackView.snp.bottom).offset(-20.0)
                 make.right.equalTo(blackView.snp.left).offset(20.0)
                 make.size.equalTo(CGSize(width: 100, height: 100))
                 make.markForCondition(true)
-                make.adapt(.all)
+
             }
 
             yellowView.snp.makeConstraints { make in
                 make.top.equalTo(blackView.snp.bottom).offset(20.0)
                 make.left.equalTo(blackView.snp.right).offset(20.0)
                 make.size.equalTo(CGSize(width: 100, height: 100))
-                make.adapt(.all)
+
             }
 
             blueView.snp.makeConstraints { make in

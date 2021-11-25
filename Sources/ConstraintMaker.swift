@@ -175,7 +175,7 @@ public class ConstraintMaker {
         }
     }
     
-    /// View图片的宽除高
+    /// 当前imageView中图片的比例(宽除高)
     public var imageRatio: CGFloat {
 #if os(iOS) || os(tvOS)
         if let target = item as? UIImageView, let image = target.image {
