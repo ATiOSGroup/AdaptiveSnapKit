@@ -16,8 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        AdaptiveRuleManager.shared.designSize = CGSize(width: 300, height: 812)
-        
+        AdaptiveRuleManager.shared.designSafeAreaSize = CGSize(width: 300, height: 700)
+
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
         let listViewController:ListViewController = ListViewController()

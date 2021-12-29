@@ -17,24 +17,52 @@ import AppKit
 public class AdaptiveRuleManager {
     public static let shared = AdaptiveRuleManager()
     
-    /// 设计尺寸
-    public var designSize: CGSize = .zero
+    /// 设计安全区尺寸
+    public var designSafeAreaSize: CGSize = .zero
+    
+    private var screenSafeAreaSizeMap: [CGFloat : CGSize] = [:]
     
     private func getScreenSize(_ description: ConstraintDescription) -> CGSize? {
-        let screen = (description.item as? ConstraintView)?.window?.screen
 #if os(iOS) || os(tvOS)
-        return (screen ?? UIScreen.main)?.bounds.size
+        let screen = (description.item as? ConstraintView)?.window?.screen ?? UIScreen.main
 #else
-        return (screen ?? NSScreen.main)?.frame.size
+        let screen = (description.item as? ConstraintView)?.window?.screen ?? NSScreen.main
+#endif
+        
+        return getSafeAreaSize(screen)
+    }
+    
+    func getSafeAreaSize(_ screen: TargetScreen) -> CGSize {
+#if os(iOS) || os(tvOS)
+        if let size = screenSafeAreaSizeMap[screen.bounds.size.width] {
+            return size
+        }
+        
+        var inset = UIEdgeInsets.zero
+        if #available(iOS 11.0, *) {
+            inset = UIApplication.shared.windows.first?.safeAreaInsets ?? .zero
+        } else {
+            inset.top = UIApplication.shared.windows.first?.rootViewController?.topLayoutGuide.length ?? 0
+            inset.bottom = UIApplication.shared.windows.first?.rootViewController?.bottomLayoutGuide.length ?? 0
+        }
+        
+        let newSize = CGSize(width: screen.bounds.size.width - inset.left - inset.right,
+                             height: screen.bounds.size.height - inset.top - inset.bottom)
+        
+        screenSafeAreaSizeMap[screen.bounds.size.width] = newSize
+        return newSize
+#else
+        return screen.frame.size
 #endif
     }
     
     internal func excute(_ description: ConstraintDescription) {
+        assert(designSafeAreaSize != .zero, "Set ApdaptiveRuleManager")
         var scaleX: CGFloat = 1
         var scaleY: CGFloat = 1
         if let currentSize = getScreenSize(description) {
-            scaleX = currentSize.width / designSize.width
-            scaleY = currentSize.height / designSize.height
+            scaleX = currentSize.width / designSafeAreaSize.width
+            scaleY = currentSize.height / designSafeAreaSize.height
         }
         applyScale(description, x: scaleX, y: scaleY)
     }
@@ -96,7 +124,8 @@ public class AdaptiveRuleManager {
         }
         
         #if os(iOS) || os(tvOS)
-            if #available(iOS 11.0, tvOS 11.0, *), let value = self as? ConstraintDirectionalInsets {
+            if #available(iOS 11.0, tvOS 11.0, *),
+                let value = constant as? ConstraintDirectionalInsets {
                 description.constant = ConstraintDirectionalInsets(top: value.top * scaleY,
                                                                    leading: value.leading * scaleX,
                                                                    bottom: value.bottom * scaleY,

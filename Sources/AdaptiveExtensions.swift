@@ -16,28 +16,22 @@ import AppKit
 extension BinaryFloatingPoint {
     /// 按照规则适配
     public func adapted(to rule: AdaptiveRule, screen: TargetScreen? = nil) -> CGFloat {
-        let screenSize: CGSize = {
-#if os(iOS) || os(tvOS)
-            return (screen ?? UIScreen.main).bounds.size
-#else
-            return (screen ?? NSScreen.main)!.frame.size
-#endif
-        }()
+        let screenSize = AdaptiveRuleManager.shared.getSafeAreaSize(.main)
         
         switch rule {
         case .byDirection:
             fatalError("Not Support At FloatingPoint Adapt.")
         case .x:
-            return CGFloat(self) * screenSize.width / AdaptiveRuleManager.shared.designSize.width
+            return CGFloat(self) * screenSize.width / AdaptiveRuleManager.shared.designSafeAreaSize.width
         case .y:
-            return CGFloat(self) * screenSize.height / AdaptiveRuleManager.shared.designSize.height
+            return CGFloat(self) * screenSize.height / AdaptiveRuleManager.shared.designSafeAreaSize.height
         }
     }
 }
 
 extension BinaryInteger {
     /// 按照规则适配
-    public func adapted(to rule: AdaptiveRule, screen: TargetScreen? = nil) -> CGFloat {
+    public func adapted(to rule: AdaptiveRule = .x, screen: TargetScreen? = nil) -> CGFloat {
         CGFloat(self).adapted(to: rule, screen: screen)
     }
 }
